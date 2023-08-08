@@ -221,3 +221,7 @@ def serialize_datetime(obj):
         return obj.isoformat()
     raise TypeError("Type not serializable")
     
+# Define tzlocal() to handle Json payload
+def tzlocal() :
+   return None
+    
