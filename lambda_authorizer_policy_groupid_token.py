@@ -1,10 +1,10 @@
-'''
+"""
 Get token from API Getaway as pass through message from Gloo
 Validate JWT token with Cognito information (group)
 Send signed new token with user and group name to Gloo
 Send token to to Gloo and Policy back to API Gateway
 Author : Uttam Manna 
-'''
+"""
 import boto3
 import json
 import base64
@@ -43,8 +43,8 @@ def lambda_handler(event, context):
     access_token = event['authorizationToken'] 
     print(access_token)
     #gloo_token_data=access_token
-    
-    # decode the token and get the user information
+    """
+    #decode the token and get the user information
     #gloo_token_data = decode_gloo_token(access_token)
     #print('gloo_token_data=', gloo_token_data)
     
@@ -58,7 +58,7 @@ def lambda_handler(event, context):
     #    l.append(userid_str[i])
     #gloo_userid = ''.join([str(n) for n in l])
     #print('Prining Gloo UserId=',gloo_userid)
-    
+    """
     #Extract Gloo groups from the token
     gloo_token_raw_data=decode_gloo_token(access_token)
     gloo_token_group_data=gloo_token_raw_data["groups"]
@@ -73,17 +73,32 @@ def lambda_handler(event, context):
     #Extract Gloo groups from the token
     
     # Define the endpoint URL of the Gloo Gateway API
-    endpoint = 'https://jwt.io/'
-    
+    #endpoint = 'https://jwt.io/'
+    endpoint = os.environ.get('endpoint')
+    print('endpoint=',endpoint)
     # Validate the access token using Amazon Cognito
-    region = 'us-east-1'
-    user_pool_id = 'us-east-1_JvnBSOtpn'
-    client_id = '3avrvs5l0s3puad6v8vluug2j'
+    #region = 'us-east-1'
+    region  = os.environ.get('region')
+    print('region=',region)
+    #user_pool_id = 'us-east-1_JvnBSOtpn'
+    user_pool_id = os.environ.get('user_pool_id')
+    print('user_pool_id =',user_pool_id)
+    #client_id = '3avrvs5l0s3puad6v8vluug2j'
+    client_id = os.environ.get('client_id')
+    print('client_id =',client_id)
     cognito = boto3.client('cognito-idp', region_name=region)
-    client_secret='1a9qp8edjcgrnrcsph3io9rk7t5g51k89iftiv6tns0qpcljqhmu'
-    username='uttam.simplilearn@gmail.com'
-    password='Usaa@123'
-    user_id = 'd4b8c488-90d1-7025-6340-7bf155dd68a4'
+    #client_secret='1a9qp8edjcgrnrcsph3io9rk7t5g51k89iftiv6tns0qpcljqhmu'
+    client_secret= os.environ.get('client_secret')
+    print(' client_secret=', client_secret)
+    #username='uttam.simplilearn@gmail.com'
+    username= os.environ.get('username')
+    print('username=',username)
+    #password='Usaa@123'
+    password= os.environ.get('password')
+    print('password=',password)
+    #user_id = 'd4b8c488-90d1-7025-6340-7bf155dd68a4'
+    user_id = os.environ.get('user_id')
+    print('user_id =',user_id)
     #user_id = gloo_userid
     secret_hash = base64.b64encode(hmac.new(bytes(client_secret, 'utf-8'), bytes(username + client_id, 'utf-8'), digestmod=hashlib.sha256).digest()).decode()
     #form the token payload
@@ -118,7 +133,6 @@ def lambda_handler(event, context):
         l.append(userlen[i])
     cognito_user_id = ''.join([str(n) for n in l])
     print('Prining Cognito User=',cognito_user_id)
-    
     
     # Extract the group name from the response
      
@@ -162,14 +176,6 @@ def lambda_handler(event, context):
     if auth == 'Allow' or auth == 'Deny' :
        #form the token payload
        payload_new = {'group_name':group_name}
-       #payload_new = {"group_name":group_name, 
-       #               "access_token" :access_token
-       #              }
-       #pem_bytes = b"-----BEGIN PRIVATE KEY-----\nMIGEAgEAMBAGByqGSM49AgEGBS..."
-       #passphrase = b"your password"
-       #private_key = serialization.load_pem_private_key(
-       #pem_bytes, password=passphrase, backend=default_backend()
-       #)
        private_key = b"-----BEGIN PRIVATE KEY-----\nMIGEAgEAMBAGByqGSM49AgEGBS..."
        jwt_token_new = jwt.encode(payload_new, private_key, algorithm='HS256', headers={"kid": "230498151c214b788dd97f22b85410a5"},)
        #To decode use jwt.decode(encoded, options={"verify_signature": False}) as above function has signed signature
