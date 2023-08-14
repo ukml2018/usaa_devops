@@ -1,10 +1,10 @@
-"""
+'''
 Get token from API Getaway as pass through message from Gloo
 Validate JWT token with Cognito information (group)
-Send signed new token with user and group name to Gloo
-Send token to to Gloo and Policy back to API Gateway
+Send signed new/Refresh token with user and group name to Gloo
+Send Policy back to API Gateway
 Author : Uttam Manna 
-"""
+'''
 import boto3
 import json
 import base64
@@ -21,7 +21,7 @@ subprocess.check_call([sys.executable, "-m", "pip", "install", "--target", "/tmp
 # Add the package to the Python path
 sys.path.insert(0, '/tmp')
 
-#Install pip3.6 install requests
+#Install pip to install requests
 subprocess.check_call([sys.executable, "-m", "pip", "install", "--target", "/tmp", "requests"])
 
 # Add the package to the Python path
@@ -43,8 +43,8 @@ def lambda_handler(event, context):
     access_token = event['authorizationToken'] 
     print(access_token)
     #gloo_token_data=access_token
-    """
-    #decode the token and get the user information
+    
+    # decode the token and get the user information
     #gloo_token_data = decode_gloo_token(access_token)
     #print('gloo_token_data=', gloo_token_data)
     
@@ -58,7 +58,7 @@ def lambda_handler(event, context):
     #    l.append(userid_str[i])
     #gloo_userid = ''.join([str(n) for n in l])
     #print('Prining Gloo UserId=',gloo_userid)
-    """
+    
     #Extract Gloo groups from the token
     gloo_token_raw_data=decode_gloo_token(access_token)
     gloo_token_group_data=gloo_token_raw_data["groups"]
@@ -107,6 +107,7 @@ def lambda_handler(event, context):
     print('Prining jwt token=',jwt_token)
     cognito_token = authenticate_and_get_token(username, password,  user_pool_id, client_id, secret_hash, access_token,user_id )
     print('Cognito information=',cognito_token)
+    session_token=cognito_token["Session"]
     
     # Convert the payload to a JSON string
     cognito_token_json = json.dumps(cognito_token)
@@ -118,12 +119,12 @@ def lambda_handler(event, context):
     cognito_token_json = json.dumps(cognito_token)
     cognito_token_dict = json.loads(cognito_token_json)
     length=len(cognito_token_dict["ChallengeParameters"]["userAttributes"])
-    userlen=cognito_token_dict["ChallengeParameters"]["userAttributes"]
+    userattributes=cognito_token_dict["ChallengeParameters"]["userAttributes"]
     l=[]
-    for i in range(10,length-2) :
-        l.append(userlen[i])
-    user_name = ''.join([str(n) for n in l])
-    print('Prining Cognito email=',user_name)
+    for i in range(34,length-2) :
+        l.append(userattributes[i])
+    cognito_email = ''.join([str(n) for n in l])
+    print('Prining Cognito email=',cognito_email)
     
     
     length=len(cognito_token_dict["ChallengeParameters"]["USER_ID_FOR_SRP"])
@@ -133,6 +134,7 @@ def lambda_handler(event, context):
         l.append(userlen[i])
     cognito_user_id = ''.join([str(n) for n in l])
     print('Prining Cognito User=',cognito_user_id)
+    
     
     # Extract the group name from the response
      
@@ -163,9 +165,18 @@ def lambda_handler(event, context):
     print('Prining Group name=',group_name)
     
     group_name = 'MEMBER' #this is for testing
+    
+    '''
+    # Access session token
+    session_token=cognito_token["Session"]
+    print('Extract Session Token=',session_token)
+    session_token_raw_data=jwt.decode(jwt=session_token,options={"verify_signature": False})
+    print('Session token raw data=', session_token_raw_data) 
+    '''
+    
     auth = 'Deny'
     #if  access_token == 'testing' :
-    #if  access_token == user_name :
+    #if  access_token == cognito_email :
     #if cognito_user_id == gloo_userid :
     if group_name == gloo_groupid :
         auth = 'Allow'
@@ -176,10 +187,30 @@ def lambda_handler(event, context):
     if auth == 'Allow' or auth == 'Deny' :
        #form the token payload
        payload_new = {'group_name':group_name}
+       #payload_new = {"group_name":group_name, 
+       #               "access_token" :access_token
+       #              }
+       #pem_bytes = b"-----BEGIN PRIVATE KEY-----\nMIGEAgEAMBAGByqGSM49AgEGBS..."
+       #passphrase = b"your password"
+       #private_key = serialization.load_pem_private_key(
+       #pem_bytes, password=passphrase, backend=default_backend()
+       #)
        private_key = b"-----BEGIN PRIVATE KEY-----\nMIGEAgEAMBAGByqGSM49AgEGBS..."
-       jwt_token_new = jwt.encode(payload_new, private_key, algorithm='HS256', headers={"kid": "230498151c214b788dd97f22b85410a5"},)
+       #jwt_token_new = jwt.encode(payload_new, private_key, algorithm='HS256', headers={"kid": "230498151c214b788dd97f22b85410a5"},)
+       payload_json_str = json.dumps(gloo_token_raw_data)
+       payload_data = json.loads(payload_json_str)
+       payload_new = {"user_id":cognito_user_id , "email":cognito_email}
+       payload_data.update(payload_new)
+       print('New data payload =',payload_data)
+       jwt_token_new = jwt.encode(payload_data, private_key, algorithm='HS256', headers={"kid": "230498151c214b788dd97f22b85410a5"},)
        #To decode use jwt.decode(encoded, options={"verify_signature": False}) as above function has signed signature
        print('Prining new jwt token=',jwt_token_new)
+       
+       # Create Refresh Token
+       #cognito_refresh_token=authenticate_and_get_refresh_token ( user_pool_id, client_id, secret_hash, private_key, group_name,session_token)
+       #session_token=cognito_token["Session"]
+       #print('Extract Session Token=',cognito_refresh_token)
+       
        # Return the new access token as the authorization context
        auth_context = {
           'access_token': jwt_token_new
@@ -235,8 +266,7 @@ def generate_policy(principal_id, effect, resource, invoke_url, context=None):
 
 #This function will return the Cognito connection payload
     
-def authenticate_and_get_token(username: str, password: str, 
-                               user_pool_id: str, app_client_id: str , secret_hash: str, sec_key: str, user_id) -> None:
+def authenticate_and_get_token(username: str, password: str,  user_pool_id: str, app_client_id: str , secret_hash: str, sec_key: str, user_id) -> None:
     
     # Import the JWT module
     import jwt   
@@ -262,11 +292,34 @@ def authenticate_and_get_token(username: str, password: str,
         UserPoolId=user_pool_id,
         ClientId=app_client_id,
         AuthFlow='ADMIN_NO_SRP_AUTH',
-        #AuthFlow="USER_PASSWORD_AUTH",
         AuthParameters={
             "USERNAME": username,
             "PASSWORD": password,
             "SECRET_HASH": secret_hash
+        },
+    )
+    
+    return response
+    
+#Get Refresh token
+def authenticate_and_get_refresh_token ( user_pool_id: str, app_client_id: str , secret_hash: str, sec_key: str, group_name: str, auth_token) -> None:
+    
+    # Import the JWT module
+    import jwt   
+    #print('import jwt from submodule')
+    client = boto3.client('cognito-idp')
+    payload = {'sub': group_name}
+    jwt_token = jwt.encode(payload, sec_key, algorithm='HS256', headers={"kid": "230498151c214b788dd97f22b85410a5"},)
+    
+    response = client.admin_initiate_auth(
+        UserPoolId=user_pool_id,
+        ClientId=app_client_id,
+        AuthFlow='REFRESH_TOKEN_AUTH',
+        AuthParameters={
+            'REFRESH_TOKEN': auth_token,
+            'CLIENT_ID': app_client_id,
+            "DEVICE_KEY" : 'null',
+            'SECRET_HASH': secret_hash
         },
     )
     
