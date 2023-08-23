@@ -53,7 +53,8 @@ def lambda_handler(event, context):
     #print('gloo_token_data=', gloo_token_data) 
     #Sample token to test
     '''
-    eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImtpZCI6IjIzMDQ5ODE1MWMyMTRiNzg4ZGQ5N2YyMmI4NTQxMGE1In0.eyJ0b2tlbl9uYW1lIjoiaWRfY2xhaW0iLCJzdWIiOiJhZTY3NzY2NC04MjdhLTRmYTUtYjM3Yy1lMzBhYmFmOWZhMzAiLCJuYmYiOjE2OTE1MjE5ODgsImlzcyI6IndzZGV2aW50ZXJuYWwudXNhYS5jb20iLCJleHBpcmVzX2luIjo2MDAsImlhdCI6MTcwMDM4ODQ2MSwiZXhwIjoxNzAwMzg4NDYxLCJwYXJ0eV9pZCI6IjMxMDgxIiwicGFydHlfdHlwZSI6IlVTQUEiLCJhdWQiOiJyc3ZjaW50LnVzYWEuY29tIiwianRpIjoiYzFiMjA0NTctY2ZjZi00MWQ4LTkyYTQtNDI2ZWJiNThmMTYyIiwidG9rZW5fdHlwZSI6Imp3dCIsInJlYWxtIjoibWVtYmVyIiwiZ3JvdXBzIjpbIk1FTUJFUiJdLCJjdXN0b21lc2NvcGUiOlsidXNhYV9yZXNvdXJjZV9zZXJ2ZXIvcmVhZF9wcm9kdWN0IHVzYWFfcmVzb3VyY2Vfc2VydmVyL2NyZWF0ZV9wcm9kdWN0IHVzYWFfcmVzb3VyY2Vfc2VydmVyL2RlbGV0ZV9wcm9kdWN0Il0sInByZWZpeCI6ImZvb191c2FhX2dycCJ9.34zUlmTuqhWXK3rjelnlqjIJ6kE1Pz5OHfSgPdaqSyY
+    -- Sample token for client id 3avrvs5l0s3puad6v8vluug2j
+    eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImtpZCI6IjIzMDQ5ODE1MWMyMTRiNzg4ZGQ5N2YyMmI4NTQxMGE1In0.eyJ0b2tlbl9uYW1lIjoiaWRfY2xhaW0iLCJzdWIiOiJhZTY3NzY2NC04MjdhLTRmYTUtYjM3Yy1lMzBhYmFmOWZhMzAiLCJuYmYiOjE2OTE1MjE5ODgsImlzcyI6IndzZGV2aW50ZXJuYWwudXNhYS5jb20iLCJleHBpcmVzX2luIjo2MDAsImlhdCI6MTcwMDM4ODQ2MSwiZXhwIjoxNzAwMzg4NDYxLCJwYXJ0eV9pZCI6IjMxMDgxIiwicGFydHlfdHlwZSI6IlVTQUEiLCJhdWQiOiJyc3ZjaW50LnVzYWEuY29tIiwianRpIjoiYzFiMjA0NTctY2ZjZi00MWQ4LTkyYTQtNDI2ZWJiNThmMTYyIiwidG9rZW5fdHlwZSI6Imp3dCIsInJlYWxtIjoibWVtYmVyIiwiZ3JvdXBzIjpbIk1FTUJFUiJdLCJjbGllbnRfaWQiOiIzYXZydnM1bDBzM3B1YWQ2djh2bHV1ZzJqIiwiY3VzdG9tZXNjb3BlIjpbInVzYWFfcmVzb3VyY2Vfc2VydmVyL3JlYWRfcHJvZHVjdCB1c2FhX3Jlc291cmNlX3NlcnZlci9jcmVhdGVfcHJvZHVjdCB1c2FhX3Jlc291cmNlX3NlcnZlci9kZWxldGVfcHJvZHVjdCJdLCJwcmVmaXgiOiJmb29fdXNhYV9ncnAifQ.X0RYr8Em7Tqfais920gpvRz5DFzN5BSy7dl-GHgae-Y
     '''  
     #Extract Gloo groups from the token
     gloo_token_raw_data=decode_gloo_token(access_token, 'y')
@@ -73,6 +74,8 @@ def lambda_handler(event, context):
     print('gloo_token_customscope_data=',gloo_token_customscope_data)
     client_scope= gloo_token_customscope_data[0].split(" ")
     print('Client scope=',client_scope)
+    client_id=gloo_token_raw_data["client_id"]
+    print('client id=',client_id)
     #Extract Gloo groups from the token
     
     # Define the endpoint URL of the Gloo Gateway API
@@ -91,24 +94,14 @@ def lambda_handler(event, context):
     user_pool_id = os.environ.get('user_pool_id')
     print('user_pool_id =',user_pool_id)
     #client_id = '3avrvs5l0s3puad6v8vluug2j'
-    client_id = os.environ.get('client_id')
+    #client_id = os.environ.get('client_id')
     print('client_id =',client_id)
     cognito = boto3.client('cognito-idp', region_name=region)
     #client_secret='1a9qp8edjcgrnrcsph3io9rk7t5g51k89iftiv6tns0qpcljqhmu'
-    client_secret= os.environ.get('client_secret')
+    #client_secret= os.environ.get('client_secret')
+    client_secret=get_cognito_client_secret(client_id, user_pool_id)
     print(' client_secret=', client_secret)
-    #username='uttam.simplilearn@gmail.com'
-    username= os.environ.get('username')
-    print('username=',username)
-    #password='Usaa@123'
-    password= os.environ.get('password')
-    print('password=',password)
-    #user_id = 'd4b8c488-90d1-7025-6340-7bf155dd68a4'
-    user_id = os.environ.get('user_id')
-    print('user_id =',user_id)
-    #user_id = gloo_userid
-    secret_hash = base64.b64encode(hmac.new(bytes(client_secret, 'utf-8'), bytes(username + client_id, 'utf-8'), digestmod=hashlib.sha256).digest()).decode()
-    
+   
     # Set the grant type to client_credentials
     grant_type = 'client_credentials'
 
@@ -145,6 +138,8 @@ def lambda_handler(event, context):
         print('cognito_token_iat=',cognito_token_iat)
         cognito_token_exp=cognito_scope_token_raw_data["exp"]
         print('cognito_token_exp=',cognito_token_exp)
+        cognito_token_auth_time=cognito_scope_token_raw_data["auth_time"]
+        print('cognito_token_exp=',cognito_token_auth_time)
         cognito_scope_token_data_list=cognito_scope_token_data.split()
         print('cognito_scope_token_data_list=',cognito_scope_token_data_list)
 
@@ -191,9 +186,10 @@ def lambda_handler(event, context):
        payload_data["iss"]=cognito_token_iss
        payload_data["iat"]=cognito_token_iat
        payload_data["exp"]=cognito_token_exp
+       payload_data["client_id"]=client_id
        payload_data["customescope"]=newScope
-       #payload_new = {"scope" : newScope}
-       #payload_data.update(payload_new)
+       payload_new = {"auth_time" : cognito_token_auth_time}
+       payload_data.update(payload_new)
        print('New data payload =',payload_data)
        # Create Refresh Token
        jwt_token_new = jwt.encode(payload_data, private_key, algorithm='HS256', headers={"kid": "230498151c214b788dd97f22b85410a5"},)
@@ -404,3 +400,18 @@ def decode_gloo_token(token: str , aud_flag: str):
                               algorithms=["RS512"],
                               options={"verify_signature": False}) 
     return decoded_data
+    
+#This function will dynamically retrive the client secret based on client id from client credential token
+def get_cognito_client_secret(app_client_id, cognito_userpool_id):
+    client = boto3.client('cognito-idp')
+    
+    try:
+        response = client.describe_user_pool_client(
+            UserPoolId=cognito_userpool_id,
+            ClientId=app_client_id
+        )
+        client_secret = response['UserPoolClient']['ClientSecret']
+        return client_secret
+    except Exception as e:
+        print("Error:", e)
+        return None
