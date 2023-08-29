@@ -34,6 +34,19 @@ from jose.utils import base64url_decode
 # Import the JWT module
 #import jwt 
 
+# total arguments
+n = len(sys.argv)
+print("Total arguments passed:", n)
+
+# Arguments passed
+print("\nName of Python script:", sys.argv[0])
+
+print("\nArguments passed:", end = " ")
+for i in range(1, n):
+    print(sys.argv[i], end = " ")
+
+token = sys.argv[1]
+
 def base64url_decode(input):
     """Helper method to base64url_decode a string.
 
@@ -112,5 +125,6 @@ def lambda_handler(event, context):
 # AWS Lambda and any other local environments
 if __name__ == '__main__':
     # for testing locally you can enter the JWT ID Token here
-    event = {'token':'eyJraWQiOiI1NlR6UGdoM250UkFrNnlCSEpETHNkREdPSmhiTlduenFpc0hcL3UxZWVXYz0iLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiIzYXZydnM1bDBzM3B1YWQ2djh2bHV1ZzJqIiwidG9rZW5fdXNlIjoiYWNjZXNzIiwic2NvcGUiOiJJdGVtXC9idXkgSXRlbVwvc2VsbCBwYXltZW50XC9jaGVxdWUgdXNhYV9yZXNvdXJjZV9zZXJ2ZXJcL1Byb2R1Y3RzIHBheW1lbnRcL2RlYml0IHVzYWFfcmVzb3VyY2Vfc2VydmVyXC9yZWFkX3Byb2R1Y3QgdXNhYV9yZXNvdXJjZV9zZXJ2ZXJcL2RlbGV0ZV9wcm9kdWN0IiwiYXV0aF90aW1lIjoxNjkzMjg2NjQwLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAudXMtZWFzdC0xLmFtYXpvbmF3cy5jb21cL3VzLWVhc3QtMV9Kdm5CU090cG4iLCJleHAiOjE2OTMyOTAyNDAsImlhdCI6MTY5MzI4NjY0MCwidmVyc2lvbiI6MiwianRpIjoiZmRiNDkyZGEtZTk2ZS00MDQwLWEyNzgtNWJlNWJjNmRkNjNmIiwiY2xpZW50X2lkIjoiM2F2cnZzNWwwczNwdWFkNnY4dmx1dWcyaiJ9.CQE293MQxxPjPxS8WUdUPwa95-w320VzLtSNGs728YLPLQqch88hKArAtDmzcSF7ghWEEYOMhwFUrZSkFrdLxeHS4mtTdWLNp6dkWKMjH3J1ovPhJUcbH2zgIu7EDWtyQ0vjDX4gO1zqJM5A77v8pIyogEQuN0ZXKI3f7PwG7KxjBxNzG9097Nd3r-KxVfY79sg52WeG6Fu6LCPi6rXr9jPjYphqhPoJJc7cJAA6y3EnTDOziY46gWAgsjS9e9_4mlBGxVRvjAN4Janzt3Z2HQQU4Bwe25qd4ODyXLpeWGYwAW3FA7xCprxZlVG-ZrXRPZ38MSPWqx1czAYH4fccdw'}
+    event = {'token':token}
+   # event = {'token':'eyJraWQiOiI1NlR6UGdoM250UkFrNnlCSEpETHNkREdPSmhiTlduenFpc0hcL3UxZWVXYz0iLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiIzYXZydnM1bDBzM3B1YWQ2djh2bHV1ZzJqIiwidG9rZW5fdXNlIjoiYWNjZXNzIiwic2NvcGUiOiJJdGVtXC9idXkgSXRlbVwvc2VsbCBwYXltZW50XC9jaGVxdWUgdXNhYV9yZXNvdXJjZV9zZXJ2ZXJcL1Byb2R1Y3RzIHBheW1lbnRcL2RlYml0IHVzYWFfcmVzb3VyY2Vfc2VydmVyXC9yZWFkX3Byb2R1Y3QgdXNhYV9yZXNvdXJjZV9zZXJ2ZXJcL2RlbGV0ZV9wcm9kdWN0IiwiYXV0aF90aW1lIjoxNjkzMjg2NjQwLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAudXMtZWFzdC0xLmFtYXpvbmF3cy5jb21cL3VzLWVhc3QtMV9Kdm5CU090cG4iLCJleHAiOjE2OTMyOTAyNDAsImlhdCI6MTY5MzI4NjY0MCwidmVyc2lvbiI6MiwianRpIjoiZmRiNDkyZGEtZTk2ZS00MDQwLWEyNzgtNWJlNWJjNmRkNjNmIiwiY2xpZW50X2lkIjoiM2F2cnZzNWwwczNwdWFkNnY4dmx1dWcyaiJ9.CQE293MQxxPjPxS8WUdUPwa95-w320VzLtSNGs728YLPLQqch88hKArAtDmzcSF7ghWEEYOMhwFUrZSkFrdLxeHS4mtTdWLNp6dkWKMjH3J1ovPhJUcbH2zgIu7EDWtyQ0vjDX4gO1zqJM5A77v8pIyogEQuN0ZXKI3f7PwG7KxjBxNzG9097Nd3r-KxVfY79sg52WeG6Fu6LCPi6rXr9jPjYphqhPoJJc7cJAA6y3EnTDOziY46gWAgsjS9e9_4mlBGxVRvjAN4Janzt3Z2HQQU4Bwe25qd4ODyXLpeWGYwAW3FA7xCprxZlVG-ZrXRPZ38MSPWqx1czAYH4fccdw'}
     lambda_handler(event, None)
