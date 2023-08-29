@@ -1,8 +1,7 @@
 '''
-This Job validate the cognito token for signature, token expiration, header and client id
-Author: IBM
+This script will validate the Cognito Token
+Author: Uttam Manna
 '''
-
 import json
 import time
 import urllib.request
@@ -59,7 +58,7 @@ region = 'us-east-1'
 #userpool_id = 'ap-southeast-2_xxxxxxxxx'
 userpool_id =  'us-east-1_JvnBSOtpn'
 #app_client_id = '<ENTER APP CLIENT ID HERE>'
-app_client_id = '3avrvs5l0s3puad6v8vluug2j'
+#app_client_id = '3avrvs5l0s3puad6v8vluug2j'
 keys_url = 'https://cognito-idp.{}.amazonaws.com/{}/.well-known/jwks.json'.format(region, userpool_id)
 print('keys_url=',keys_url)
 # instead of re-downloading the public keys every time
@@ -71,6 +70,9 @@ keys = json.loads(response.decode('utf-8'))['keys']
 print('keys=',keys)
 def lambda_handler(event, context):
     token = event['token']
+    app_client = jwt.get_unverified_claims(token)
+    app_client_id = app_client['client_id']
+    print('App Client Id=',app_client_id)
     # get the kid from the headers prior to verification
     headers = jwt.get_unverified_headers(token)
     kid = headers['kid']
@@ -85,15 +87,15 @@ def lambda_handler(event, context):
         return False
     # construct the public key
     public_key = jwk.construct(keys[key_index])
-    print('Public Key=',public_key)
+    #print('Public Key=',public_key)
     # get the last two sections of the token,
     # message and signature (encoded in base64)
     message, encoded_signature = str(token).rsplit('.', 1)
-    print('Message=',message)
-    print('Message encode=',message.encode("utf8"))
+    #print('Message=',message)
+    #print('Message encode=',message.encode("utf8"))
     # decode the signature
     decoded_signature = base64url_decode(encoded_signature.encode('utf-8'))
-    print('decoded_signature=',decoded_signature)
+    #print('decoded_signature=',decoded_signature)
     # verify the signature
     if not public_key.verify(message.encode("utf8"), decoded_signature):
         print('Signature verification failed')
@@ -120,5 +122,4 @@ def lambda_handler(event, context):
 if __name__ == '__main__':
     # for testing locally you can enter the JWT ID Token here
     event = {'token':token}
-   # event = {'token':'eyJraWQiOiI1NlR6UGdoM250UkFrNnlCSEpETHNkREdPSmhiTlduenFpc0hcL3UxZWVXYz0iLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiIzYXZydnM1bDBzM3B1YWQ2djh2bHV1ZzJqIiwidG9rZW5fdXNlIjoiYWNjZXNzIiwic2NvcGUiOiJJdGVtXC9idXkgSXRlbVwvc2VsbCBwYXltZW50XC9jaGVxdWUgdXNhYV9yZXNvdXJjZV9zZXJ2ZXJcL1Byb2R1Y3RzIHBheW1lbnRcL2RlYml0IHVzYWFfcmVzb3VyY2Vfc2VydmVyXC9yZWFkX3Byb2R1Y3QgdXNhYV9yZXNvdXJjZV9zZXJ2ZXJcL2RlbGV0ZV9wcm9kdWN0IiwiYXV0aF90aW1lIjoxNjkzMjg2NjQwLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAudXMtZWFzdC0xLmFtYXpvbmF3cy5jb21cL3VzLWVhc3QtMV9Kdm5CU090cG4iLCJleHAiOjE2OTMyOTAyNDAsImlhdCI6MTY5MzI4NjY0MCwidmVyc2lvbiI6MiwianRpIjoiZmRiNDkyZGEtZTk2ZS00MDQwLWEyNzgtNWJlNWJjNmRkNjNmIiwiY2xpZW50X2lkIjoiM2F2cnZzNWwwczNwdWFkNnY4dmx1dWcyaiJ9.CQE293MQxxPjPxS8WUdUPwa95-w320VzLtSNGs728YLPLQqch88hKArAtDmzcSF7ghWEEYOMhwFUrZSkFrdLxeHS4mtTdWLNp6dkWKMjH3J1ovPhJUcbH2zgIu7EDWtyQ0vjDX4gO1zqJM5A77v8pIyogEQuN0ZXKI3f7PwG7KxjBxNzG9097Nd3r-KxVfY79sg52WeG6Fu6LCPi6rXr9jPjYphqhPoJJc7cJAA6y3EnTDOziY46gWAgsjS9e9_4mlBGxVRvjAN4Janzt3Z2HQQU4Bwe25qd4ODyXLpeWGYwAW3FA7xCprxZlVG-ZrXRPZ38MSPWqx1czAYH4fccdw'}
     lambda_handler(event, None)
