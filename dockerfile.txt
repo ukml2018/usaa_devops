@@ -1,0 +1,26 @@
+# Use the official Go image as the base image
+FROM golang:1.17-alpine AS build
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the Go script file
+COPY cognitoclientrs.go ./
+
+# Build the Go script
+RUN go build -o app .
+
+# Create a minimal image with the compiled binary
+FROM alpine:latest
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the binary from the build stage to the final stage
+COPY --from=build /app/app .
+
+# Set the entry point for the container
+ENTRYPOINT ["./app"]
+
+# Set the default command-line arguments
+CMD ["us-east-1_JvnBSOtpn", "test1", "test-user-pool-client" , "read", "write","delete"]
