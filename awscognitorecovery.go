@@ -1,3 +1,5 @@
+// This go code is used to recover the cognito resources
+// Author : IBM
 package main
 
 import (
