@@ -1,0 +1,506 @@
+{
+  "UserPool": {
+    "AccountRecoverySetting": {
+      "RecoveryMechanisms": [
+        {
+          "Name": "verified_email",
+          "Priority": 1
+        }
+      ]
+    },
+    "AdminCreateUserConfig": {
+      "AllowAdminCreateUserOnly": false,
+      "InviteMessageTemplate": null,
+      "UnusedAccountValidityDays": 7
+    },
+    "AliasAttributes": null,
+    "Arn": "arn:aws:cognito-idp:us-east-1:783621988852:userpool/us-east-1_JvnBSOtpn",
+    "AutoVerifiedAttributes": [
+      "email"
+    ],
+    "CreationDate": "2023-08-02T03:10:28.116Z",
+    "CustomDomain": null,
+    "DeletionProtection": "INACTIVE",
+    "DeviceConfiguration": null,
+    "Domain": "usaa-domain99999",
+    "EmailConfiguration": {
+      "ConfigurationSet": null,
+      "EmailSendingAccount": "COGNITO_DEFAULT",
+      "From": null,
+      "ReplyToEmailAddress": null,
+      "SourceArn": null
+    },
+    "EmailConfigurationFailure": null,
+    "EmailVerificationMessage": null,
+    "EmailVerificationSubject": null,
+    "EstimatedNumberOfUsers": 2,
+    "Id": "us-east-1_JvnBSOtpn",
+    "LambdaConfig": {
+      "CreateAuthChallenge": null,
+      "CustomEmailSender": null,
+      "CustomMessage": null,
+      "CustomSMSSender": null,
+      "DefineAuthChallenge": null,
+      "KMSKeyID": null,
+      "PostAuthentication": null,
+      "PostConfirmation": null,
+      "PreAuthentication": null,
+      "PreSignUp": null,
+      "PreTokenGeneration": null,
+      "UserMigration": null,
+      "VerifyAuthChallengeResponse": null
+    },
+    "LastModifiedDate": "2023-08-21T13:52:42.055Z",
+    "MfaConfiguration": "OFF",
+    "Name": "usaa-user-pool",
+    "Policies": {
+      "PasswordPolicy": {
+        "MinimumLength": 8,
+        "RequireLowercase": true,
+        "RequireNumbers": true,
+        "RequireSymbols": true,
+        "RequireUppercase": true,
+        "TemporaryPasswordValidityDays": 7
+      }
+    },
+    "SchemaAttributes": [
+      {
+        "AttributeDataType": "String",
+        "DeveloperOnlyAttribute": false,
+        "Mutable": false,
+        "Name": "sub",
+        "NumberAttributeConstraints": null,
+        "Required": true,
+        "StringAttributeConstraints": {
+          "MaxLength": "2048",
+          "MinLength": "1"
+        }
+      },
+      {
+        "AttributeDataType": "String",
+        "DeveloperOnlyAttribute": false,
+        "Mutable": true,
+        "Name": "name",
+        "NumberAttributeConstraints": null,
+        "Required": false,
+        "StringAttributeConstraints": {
+          "MaxLength": "2048",
+          "MinLength": "0"
+        }
+      },
+      {
+        "AttributeDataType": "String",
+        "DeveloperOnlyAttribute": false,
+        "Mutable": true,
+        "Name": "given_name",
+        "NumberAttributeConstraints": null,
+        "Required": false,
+        "StringAttributeConstraints": {
+          "MaxLength": "2048",
+          "MinLength": "0"
+        }
+      },
+      {
+        "AttributeDataType": "String",
+        "DeveloperOnlyAttribute": false,
+        "Mutable": true,
+        "Name": "family_name",
+        "NumberAttributeConstraints": null,
+        "Required": false,
+        "StringAttributeConstraints": {
+          "MaxLength": "2048",
+          "MinLength": "0"
+        }
+      },
+      {
+        "AttributeDataType": "String",
+        "DeveloperOnlyAttribute": false,
+        "Mutable": true,
+        "Name": "middle_name",
+        "NumberAttributeConstraints": null,
+        "Required": false,
+        "StringAttributeConstraints": {
+          "MaxLength": "2048",
+          "MinLength": "0"
+        }
+      },
+      {
+        "AttributeDataType": "String",
+        "DeveloperOnlyAttribute": false,
+        "Mutable": true,
+        "Name": "nickname",
+        "NumberAttributeConstraints": null,
+        "Required": false,
+        "StringAttributeConstraints": {
+          "MaxLength": "2048",
+          "MinLength": "0"
+        }
+      },
+      {
+        "AttributeDataType": "String",
+        "DeveloperOnlyAttribute": false,
+        "Mutable": true,
+        "Name": "preferred_username",
+        "NumberAttributeConstraints": null,
+        "Required": false,
+        "StringAttributeConstraints": {
+          "MaxLength": "2048",
+          "MinLength": "0"
+        }
+      },
+      {
+        "AttributeDataType": "String",
+        "DeveloperOnlyAttribute": false,
+        "Mutable": true,
+        "Name": "profile",
+        "NumberAttributeConstraints": null,
+        "Required": false,
+        "StringAttributeConstraints": {
+          "MaxLength": "2048",
+          "MinLength": "0"
+        }
+      },
+      {
+        "AttributeDataType": "String",
+        "DeveloperOnlyAttribute": false,
+        "Mutable": true,
+        "Name": "picture",
+        "NumberAttributeConstraints": null,
+        "Required": false,
+        "StringAttributeConstraints": {
+          "MaxLength": "2048",
+          "MinLength": "0"
+        }
+      },
+      {
+        "AttributeDataType": "String",
+        "DeveloperOnlyAttribute": false,
+        "Mutable": true,
+        "Name": "website",
+        "NumberAttributeConstraints": null,
+        "Required": false,
+        "StringAttributeConstraints": {
+          "MaxLength": "2048",
+          "MinLength": "0"
+        }
+      },
+      {
+        "AttributeDataType": "String",
+        "DeveloperOnlyAttribute": false,
+        "Mutable": true,
+        "Name": "email",
+        "NumberAttributeConstraints": null,
+        "Required": false,
+        "StringAttributeConstraints": {
+          "MaxLength": "2048",
+          "MinLength": "0"
+        }
+      },
+      {
+        "AttributeDataType": "Boolean",
+        "DeveloperOnlyAttribute": false,
+        "Mutable": true,
+        "Name": "email_verified",
+        "NumberAttributeConstraints": null,
+        "Required": false,
+        "StringAttributeConstraints": null
+      },
+      {
+        "AttributeDataType": "String",
+        "DeveloperOnlyAttribute": false,
+        "Mutable": true,
+        "Name": "gender",
+        "NumberAttributeConstraints": null,
+        "Required": false,
+        "StringAttributeConstraints": {
+          "MaxLength": "2048",
+          "MinLength": "0"
+        }
+      },
+      {
+        "AttributeDataType": "String",
+        "DeveloperOnlyAttribute": false,
+        "Mutable": true,
+        "Name": "birthdate",
+        "NumberAttributeConstraints": null,
+        "Required": false,
+        "StringAttributeConstraints": {
+          "MaxLength": "10",
+          "MinLength": "10"
+        }
+      },
+      {
+        "AttributeDataType": "String",
+        "DeveloperOnlyAttribute": false,
+        "Mutable": true,
+        "Name": "zoneinfo",
+        "NumberAttributeConstraints": null,
+        "Required": false,
+        "StringAttributeConstraints": {
+          "MaxLength": "2048",
+          "MinLength": "0"
+        }
+      },
+      {
+        "AttributeDataType": "String",
+        "DeveloperOnlyAttribute": false,
+        "Mutable": true,
+        "Name": "locale",
+        "NumberAttributeConstraints": null,
+        "Required": false,
+        "StringAttributeConstraints": {
+          "MaxLength": "2048",
+          "MinLength": "0"
+        }
+      },
+      {
+        "AttributeDataType": "String",
+        "DeveloperOnlyAttribute": false,
+        "Mutable": true,
+        "Name": "phone_number",
+        "NumberAttributeConstraints": null,
+        "Required": false,
+        "StringAttributeConstraints": {
+          "MaxLength": "2048",
+          "MinLength": "0"
+        }
+      },
+      {
+        "AttributeDataType": "Boolean",
+        "DeveloperOnlyAttribute": false,
+        "Mutable": true,
+        "Name": "phone_number_verified",
+        "NumberAttributeConstraints": null,
+        "Required": false,
+        "StringAttributeConstraints": null
+      },
+      {
+        "AttributeDataType": "String",
+        "DeveloperOnlyAttribute": false,
+        "Mutable": true,
+        "Name": "address",
+        "NumberAttributeConstraints": null,
+        "Required": false,
+        "StringAttributeConstraints": {
+          "MaxLength": "2048",
+          "MinLength": "0"
+        }
+      },
+      {
+        "AttributeDataType": "Number",
+        "DeveloperOnlyAttribute": false,
+        "Mutable": true,
+        "Name": "updated_at",
+        "NumberAttributeConstraints": {
+          "MaxValue": null,
+          "MinValue": "0"
+        },
+        "Required": false,
+        "StringAttributeConstraints": null
+      }
+    ],
+    "SmsAuthenticationMessage": null,
+    "SmsConfiguration": null,
+    "SmsConfigurationFailure": null,
+    "SmsVerificationMessage": null,
+    "Status": null,
+    "UserAttributeUpdateSettings": {
+      "AttributesRequireVerificationBeforeUpdate": []
+    },
+    "UserPoolAddOns": null,
+    "UserPoolTags": {},
+    "UsernameAttributes": [
+      "email"
+    ],
+    "UsernameConfiguration": null,
+    "VerificationMessageTemplate": {
+      "DefaultEmailOption": "CONFIRM_WITH_CODE",
+      "EmailMessage": null,
+      "EmailMessageByLink": null,
+      "EmailSubject": null,
+      "EmailSubjectByLink": null,
+      "SmsMessage": null
+    }
+  },
+  "UserPoolClients": [
+    {
+      "ClientId": "12ka2opj7dm9453rrrmp5r8pbv",
+      "ClientName": "test-user-pool-client",
+      "UserPoolId": "us-east-1_JvnBSOtpn"
+    },
+    {
+      "ClientId": "3avrvs5l0s3puad6v8vluug2j",
+      "ClientName": "usaa-user-pool-client",
+      "UserPoolId": "us-east-1_JvnBSOtpn"
+    },
+    {
+      "ClientId": "4hhd01fm5n6l2boupupdd4f3n1",
+      "ClientName": "test-user-pool-client",
+      "UserPoolId": "us-east-1_JvnBSOtpn"
+    }
+  ],
+  "ResourceServers": [
+    {
+      "Identifier": "Item",
+      "Name": "resource_server2",
+      "Scopes": [
+        {
+          "ScopeDescription": "item.buy",
+          "ScopeName": "buy"
+        },
+        {
+          "ScopeDescription": "item.sell",
+          "ScopeName": "sell"
+        }
+      ],
+      "UserPoolId": "us-east-1_JvnBSOtpn"
+    },
+    {
+      "Identifier": "payment",
+      "Name": "payment",
+      "Scopes": [
+        {
+          "ScopeDescription": "cheque.payment",
+          "ScopeName": "cheque"
+        },
+        {
+          "ScopeDescription": "debit.payment",
+          "ScopeName": "debit"
+        }
+      ],
+      "UserPoolId": "us-east-1_JvnBSOtpn"
+    },
+    {
+      "Identifier": "test1",
+      "Name": "test1",
+      "Scopes": [
+        {
+          "ScopeDescription": "Access to modify",
+          "ScopeName": "modify"
+        },
+        {
+          "ScopeDescription": "Access to read",
+          "ScopeName": "read"
+        },
+        {
+          "ScopeDescription": "Access to write",
+          "ScopeName": "write"
+        },
+        {
+          "ScopeDescription": "Access to delete",
+          "ScopeName": "delete"
+        }
+      ],
+      "UserPoolId": "us-east-1_JvnBSOtpn"
+    },
+    {
+      "Identifier": "test2",
+      "Name": "test2",
+      "Scopes": [
+        {
+          "ScopeDescription": "Access to modify",
+          "ScopeName": "modify"
+        },
+        {
+          "ScopeDescription": "Access to read",
+          "ScopeName": "read"
+        },
+        {
+          "ScopeDescription": "Access to write",
+          "ScopeName": "write"
+        },
+        {
+          "ScopeDescription": "Access to delete",
+          "ScopeName": "delete"
+        }
+      ],
+      "UserPoolId": "us-east-1_JvnBSOtpn"
+    },
+    {
+      "Identifier": "usaa_resource_server",
+      "Name": "usaa_resource",
+      "Scopes": [
+        {
+          "ScopeDescription": "Products",
+          "ScopeName": "Products"
+        },
+        {
+          "ScopeDescription": "Read Product detail",
+          "ScopeName": "read_product"
+        },
+        {
+          "ScopeDescription": "Create a New Product",
+          "ScopeName": "create_product"
+        },
+        {
+          "ScopeDescription": "Delete a New Product",
+          "ScopeName": "delete_product"
+        }
+      ],
+      "UserPoolId": "us-east-1_JvnBSOtpn"
+    }
+  ],
+  "UserGroups": [
+    {
+      "CreationDate": "2023-08-02T03:10:28.653Z",
+      "Description": "Usaa user group",
+      "GroupName": "usaa-user-group",
+      "LastModifiedDate": "2023-08-02T03:10:28.653Z",
+      "Precedence": 1,
+      "RoleArn": "arn:aws:iam::783621988852:role/usaa-role",
+      "UserPoolId": "us-east-1_JvnBSOtpn"
+    }
+  ],
+  "Users": [
+    {
+      "Attributes": [
+        {
+          "Name": "sub",
+          "Value": "d4b8c488-90d1-7025-6340-7bf155dd68a4"
+        },
+        {
+          "Name": "email",
+          "Value": "uttam.simplilearn@gmail.com"
+        }
+      ],
+      "Enabled": true,
+      "MFAOptions": null,
+      "UserCreateDate": "2023-08-03T14:13:28.365Z",
+      "UserLastModifiedDate": "2023-08-11T10:34:45.536Z",
+      "UserStatus": "FORCE_CHANGE_PASSWORD",
+      "Username": "d4b8c488-90d1-7025-6340-7bf155dd68a4"
+    },
+    {
+      "Attributes": [
+        {
+          "Name": "sub",
+          "Value": "f458b4e8-90f1-70f7-cdaf-fb969f6c9ca5"
+        },
+        {
+          "Name": "email_verified",
+          "Value": "true"
+        },
+        {
+          "Name": "email",
+          "Value": "uttmanna@in.ibm.com"
+        }
+      ],
+      "Enabled": true,
+      "MFAOptions": null,
+      "UserCreateDate": "2023-08-11T10:39:19.234Z",
+      "UserLastModifiedDate": "2023-08-11T10:39:19.234Z",
+      "UserStatus": "FORCE_CHANGE_PASSWORD",
+      "Username": "f458b4e8-90f1-70f7-cdaf-fb969f6c9ca5"
+    }
+  ],
+  "DomainConfiguration": {
+    "AWSAccountId": null,
+    "CloudFrontDistribution": null,
+    "CustomDomainConfig": null,
+    "Domain": "usaa-domain999888",
+    "S3Bucket": null,
+    "Status": null,
+    "UserPoolId": null,
+    "Version": null
+  }
+}
