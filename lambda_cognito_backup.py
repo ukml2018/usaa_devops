@@ -37,6 +37,31 @@ def lambda_handler(event, context):
         Key='user_pool_clients.json',
         Body=json.dumps(user_pool_clients, indent=4, default=serialize_datetime)
     )
+    
+    for client in user_pool_clients['UserPoolClients']:
+        client_id = client['ClientId']
+        ClientName = client['ClientName']
+
+        # Backup client secret
+        client_secret = cognito_client.describe_user_pool_client(UserPoolId=user_pool_id, ClientId=client_id)
+        s3_client.put_object(
+            Bucket=bucket_name,
+            #Key=f'client_secret_{client_id}.json',
+            Key=f'client_secret_{ClientName}.json',
+            Body=json.dumps(client_secret, indent=4,default=serialize_datetime)
+        )
+        '''
+        # Backup custom scopes for app client
+        custom_scopes = cognito_client.list_scopes(
+            UserPoolId=user_pool_id,
+            ClientId=client_id
+        )
+        s3_client.put_object(
+            Bucket=bucket_name,
+            Key=f'custom_scopes_{client_id}.json',
+            Body=json.dumps(custom_scopes, indent=4, default=serialize_datetime)
+        )
+        '''
 
     # Backup resource servers
     resource_servers = cognito_client.list_resource_servers(UserPoolId=user_pool_id, MaxResults=40)
@@ -45,7 +70,21 @@ def lambda_handler(event, context):
         Key='resource_servers.json',
         Body=json.dumps(resource_servers, indent=4, default=serialize_datetime)
     )
+    '''
+    for server in resource_servers['ResourceServers']:
+        server_identifier = server['Identifier']
 
+        # Backup custom scopes for resource server
+        custom_scopes = cognito_client.list_scopes(
+            UserPoolId=user_pool_id,
+            ResourceServerIdentifier=server_identifier
+        )
+        s3_client.put_object(
+            Bucket=bucket_name,
+            Key=f'custom_scopes_{server_identifier}.json',
+            Body=json.dumps(custom_scopes, indent=4)
+        )
+    '''    
     # Backup user groups
     user_groups = cognito_client.list_groups(UserPoolId=user_pool_id)
     s3_client.put_object(
