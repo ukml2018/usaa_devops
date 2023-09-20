@@ -53,11 +53,17 @@ def lambda_handler(event, context):
         print('Client to be created=',client)
         #cognito_client.update_user_pool_client(UserPoolId=user_pool_id, ClientId=client['ClientId'], **client)
         #cognito_client.update_user_pool_client(**client)
-        cognito_client.create_user_pool_client(**client)
+        cognito_client.create_user_pool_client(**client,GenerateSecret=True,AllowedOAuthFlows=['client_credentials'])
         
-        
+    '''    
     #Update the client id
-    
+    for client in user_pool_clients['UserPoolClients']:
+        #client.pop('ClientId')
+        client['UserPoolId']=newClientID
+        print('Client to be created=',client)
+        #cognito_client.update_user_pool_client(UserPoolId=user_pool_id, ClientId=client['ClientId'], **client)
+        cognito_client.update_user_pool_client(**client)
+    '''
     
     # Restore resource servers
     resource_servers = s3_client.get_object(Bucket=bucket_name, Key='resource_servers.json')
@@ -103,9 +109,11 @@ def lambda_handler(event, context):
     cognito_host_domain = json.loads(cognito_host_domain['Body'].read().decode('utf-8'))
     #cognito_client.update_user_pool_domain(Domain=user_pool_id, **cognito_host_domain)
     #cognito_client.update_user_pool_domain(domain)
-    #cognito_client.update_user_pool_domain(UserPoolId=newClientID,Domain=domain, CustomDomainConfig={'CertificateArn': '63d73533-29ba-4b6f-aa7a-ca3d9d2786d0'})
+    #cognito_client.create_user_pool_domain(UserPoolId=newClientID,Domain=domain, CustomDomainConfig={'CertificateArn': 'arn:aws:acm:region:123456789012:certificate'})
+    cognito_client.create_user_pool_domain(UserPoolId=newClientID,Domain=domain)
     #cognito_client.update_user_pool_domain(UserPoolId=newClientID,Domain=domain, CustomDomainConfig=None)
     
+    '''
     # Retrieve user pool clients
     user_pool_clients = cognito_client.list_user_pool_clients(UserPoolId=newClientID)
     for client in user_pool_clients['UserPoolClients']:
@@ -122,7 +130,7 @@ def lambda_handler(event, context):
             ClientId=client_id,
             ClientSecret=client_secret
         )
-
+     '''
     return {
         'statusCode': 200,
         'body': json.dumps('Cognito recovery completed successfully!')
