@@ -1,3 +1,8 @@
+'''
+This lambda will restore the Cognito resources from the backup cognito resources from s3 bucket
+Author: Uttam Manna
+'''
+
 import json
 import boto3
 
@@ -113,7 +118,6 @@ def lambda_handler(event, context):
     cognito_client.create_user_pool_domain(UserPoolId=newClientID,Domain=domain)
     #cognito_client.update_user_pool_domain(UserPoolId=newClientID,Domain=domain, CustomDomainConfig=None)
     
-    '''
     # Retrieve user pool clients
     user_pool_clients = cognito_client.list_user_pool_clients(UserPoolId=newClientID)
     for client in user_pool_clients['UserPoolClients']:
@@ -123,14 +127,19 @@ def lambda_handler(event, context):
         client_secret_file = s3_client.get_object(Bucket=bucket_name, Key=f'client_secret_{ClientName}.json')
         client_secret_data = json.loads(client_secret_file['Body'].read().decode('utf-8'))
         client_secret = client_secret_data['UserPoolClient']['ClientSecret']
-
-        # Update client configuration with recovered client secret
-        cognito_client.update_user_pool_client(
+        print('client_secret_data=',client_secret_data)
+        #if client_secret['UserPoolClient'][0].get("AllowedOAuthScopes")!= None:
+        if 'AllowedOAuthScopes' in client_secret_data['UserPoolClient']:
+            AllowedOAuthScopes_data= client_secret_data['UserPoolClient']['AllowedOAuthScopes']
+            print('Client Name=',ClientName)
+            print('AllowedOAuthScopes Data=',AllowedOAuthScopes_data)
+            # Update client configuration with recovered client secret
+            cognito_client.update_user_pool_client(
             UserPoolId=newClientID,
             ClientId=client_id,
-            ClientSecret=client_secret
-        )
-     '''
+            AllowedOAuthScopes=AllowedOAuthScopes_data
+            )
+    
     return {
         'statusCode': 200,
         'body': json.dumps('Cognito recovery completed successfully!')

@@ -1,3 +1,7 @@
+'''
+This lambda function will take back up of user pool, user client , resources, scopes and host domain
+Author: Uttam Manna
+'''
 import json
 import boto3
 import datetime
@@ -50,6 +54,25 @@ def lambda_handler(event, context):
             Key=f'client_secret_{ClientName}.json',
             Body=json.dumps(client_secret, indent=4,default=serialize_datetime)
         )
+        # Backup client scope
+        '''
+        hosted_ui_config = client_secret.get('UserPoolClient', {}).get('AllowedOAuthScopes')
+        if hosted_ui_config:
+           print("Hosted UI Parameters for Client ID {} in User Pool {}:" .format(client_id,user_pool_id))
+           print(hosted_ui_config)
+        for items in hosted_ui_config:
+           if items not in AllowedOAuthScopes_gen:
+              AllowedOAuthScopes_gen.append(items)
+        else:
+           print("Hosted UI Parameters not found for Client ID {} in User Pool {}:" .format(client_id,user_pool_id))
+        print (AllowedOAuthScopes_gen)
+        s3_client.put_object(
+            Bucket=bucket_name,
+            #Key=f'client_secret_{client_id}.json',
+            Key=f'client_scope_{ClientName}.json',
+            Body=json.dumps(AllowedOAuthScopes_gen, indent=4,default=serialize_datetime)
+        )
+        '''
         '''
         # Backup custom scopes for app client
         custom_scopes = cognito_client.list_scopes(
